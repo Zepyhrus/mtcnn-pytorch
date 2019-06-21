@@ -12,6 +12,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data as data
 from util.torchutil import SaveCheckPoint
 from util.Logger import Logger
+from util.utility import parse_args
 from Nets import *
 
 
@@ -44,6 +45,7 @@ save_interval = 10000
 
 prefix = "o"
 save_dir = "./models"
+
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
 save_prefix = save_dir + "/{}net_20181218".format(prefix)
@@ -65,6 +67,7 @@ train_anno_path += [os.path.join(root_dir, "train_faces_{}/part/label_part".form
 
 train_anno_path += [os.path.join(root_dir, "train_faces_{}/neg/image_neg".format(prefix))]
 train_anno_path += [os.path.join(root_dir, "train_faces_{}/neg/label_neg".format(prefix))]
+
 
 
 def train():
