@@ -82,7 +82,6 @@ c++ 模型文件在 `${REPO}/cpp`目录下
 `~/anaconda3/bin/python train_rnet.py`
 
 #### 参与贡献
-
 1. Fork 本仓库
 2. 新建 Feat_xxx 分支
 3. 提交代码
