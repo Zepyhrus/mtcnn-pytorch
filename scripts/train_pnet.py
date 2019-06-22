@@ -45,6 +45,7 @@ save_interval = 50000
 
 #TODO: modify the prefix to train different net
 net_type = parse_args(sys.argv[1:]).net_type
+
 if net_type == 'PNET':
   prefix = "p"
 
@@ -52,7 +53,7 @@ save_dir = "./models"
 
 if not os.path.exists(save_dir):
   os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20181218".format(prefix)
+save_prefix = save_dir + "/{}net_20190621".format(prefix)
 
 
 root_dir = r"../dataset/"

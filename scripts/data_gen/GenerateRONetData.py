@@ -45,7 +45,7 @@ else:
   post_fix = 'o'
 
 # path to wider face
-root_dir = r'~/dataset/WIDER_FACE'
+root_dir = r'~/Workspace/dataset/WIDER_FACE'
 root_dir = os.path.expanduser(root_dir)
 
 train_dir = os.path.join(root_dir, 'WIDER_train/images')
@@ -250,6 +250,7 @@ def GenerateData(mt):
         txn_neg_label = env_neg_label.begin(write=True)
         inner_neg_idx = 0
         log.info("now commit netative lmdb")
+
       if inner_part_idx > 1000:
         txn_part_image.commit()
         txn_part_label.commit()
@@ -290,7 +291,7 @@ if __name__ == "__main__":
   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
   device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
   # pnet
-  pnet_weight_path = "./models/pnet_20181218_final.pkl"
+  pnet_weight_path = "./models/pnet_20190621_final.pkl"
   pnet = PNet(test=True)
   LoadWeights(pnet_weight_path, pnet)
   pnet.to(device)
@@ -298,11 +299,17 @@ if __name__ == "__main__":
   # rnet
   rnet = None
   if net_type == "ONET":
-    rnet_weight_path = "./models/rnet_20181218_final.pkl"
+    rnet_weight_path = "./models/rnet_20190621_final.pkl"
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
 
-  mt = MTCNN(detectors=[pnet, rnet, None], min_face_size=24, threshold=[0.5, 0.5, 0.5], device=device)
+  mt = MTCNN(
+    detectors=[pnet, rnet, None],
+    min_face_size=24,
+    threshold=[0.5, 0.5, 0.5],
+    device=device,
+    scalor=0.709)
+  
   GenerateData(mt)
   log.info("over...")

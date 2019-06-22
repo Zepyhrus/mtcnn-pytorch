@@ -49,7 +49,6 @@ class PNet(nn.Module):
             cls = self.softmax(cls)
         return cls, bbox
 
-
 class RNet(nn.Module):
     def __init__(self, test=False):
         super(RNet, self).__init__()
@@ -146,7 +145,6 @@ def AddClsLoss(pred, targets, k):
     loss = torch.mean(loss)
     return loss
 
-
 def AddClsAccuracy(pred, targets):
     label = targets[:, -1].long()
     idx = label < 2
@@ -158,7 +156,6 @@ def AddClsAccuracy(pred, targets):
     s = torch.sum(c)
     n = pred_use.size(0)
     return float(s.item()) / float(n)
-
 
 def AddRegLoss(pred, targets):
     label = targets[:, -1].long()
@@ -172,7 +169,6 @@ def AddRegLoss(pred, targets):
     loss = F.smooth_l1_loss(pred_squeeze, bbox_use)
     return loss
     # return
-
 
 def AddBoxMap(pred, target, image_width, image_height):
     label = target[:, -1].long()

@@ -50,18 +50,18 @@ anno_dir = os.path.join(root_dir, 'wider_face_split')
 # path to output root dir
 output_root_dir = r"../dataset/train_faces_p"
 if not os.path.exists(output_root_dir):
-  os.mkdir(output_root_dir)
+  os.makedirs(output_root_dir)
 
 # output dirs: pos and neg
 output_pos_dir = os.path.join(output_root_dir, "pos")
 output_neg_dir = os.path.join(output_root_dir, "neg")
 output_part_dir = os.path.join(output_root_dir, "part")
 if not os.path.exists(output_pos_dir):
-  os.mkdir(output_pos_dir)
+  os.makedirs(output_pos_dir)
 if not os.path.exists(output_neg_dir):
-  os.mkdir(output_neg_dir)
+  os.makedirs(output_neg_dir)
 if not os.path.exists(output_part_dir):
-  os.mkdir(output_part_dir)
+  os.makedirs(output_part_dir)
 
 # ouput labels file
 # label_pos = os.path.join(output_pos_dir, "anno_pos.txt")
