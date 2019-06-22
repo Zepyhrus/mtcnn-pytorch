@@ -25,8 +25,13 @@ def Image2Tensor(img, MEANS):
 
 class MTCNN(object):
 
-  def __init__(self, detectors=[None, None, None], min_face_size=40, scalor=0.79, threshold=[0.6, 0.7, 0.7],
-         device=torch.device("cpu")):
+  def __init__(
+    self,
+    detectors,
+    min_face_size,
+    scalor,
+    threshold,
+    device):
     self.pnet = detectors[0]
     self.rnet = detectors[1]
     self.onet = detectors[2]
@@ -320,7 +325,12 @@ if __name__ == "__main__":
   LoadWeights(onet_weight_path, onet)
   onet.to(device)
 
-  mtcnn = MTCNN(detectors=[pnet, rnet, onet], device=device, threshold=[0.6, 0.7, 0.7])
+  mtcnn = MTCNN(
+    detectors=[pnet, rnet, onet],
+    min_face_size=20,
+    device=device,
+    scalor=0.709,
+    threshold=[0.6, 0.7, 0.7])
 
 
   #
