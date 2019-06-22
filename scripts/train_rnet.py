@@ -40,13 +40,13 @@ weight_decay = 0.0005
 stepsize = [80000, 140000, 200000, 250000]
 max_iter = 300000
 
-save_interval = 10000
+save_interval = 50000
 
 prefix = "r"
 save_dir = "./models"
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20181218".format(prefix)
+save_prefix = save_dir + "/{}net_20190621".format(prefix)
 
 
 root_dir = r"../dataset/"
@@ -69,19 +69,23 @@ train_anno_path += [os.path.join(root_dir, "train_faces_{}/neg/label_neg".format
 
 def train():
     start_epoch = 0
-    # dataset
+    # dataset, this line takes a lot of time without response
+    print('Dataset')
     train_dataset = DataSource(train_anno_path, transform=Compose([
         RandomMirror(0.5), SubtractFloatMeans(MEANS), ToPercentCoords(), PermuteCHW()
     ]), ratio=2, image_shape=(24,24,3))
 
     # net
+    print('Net')
     net = RNet()
 
     # optimizer and scheduler
+    print('Optimizer and scheduler')
     optimizer = optim.SGD(net.parameters(), lr=base_lr, momentum=momentum, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, stepsize, gamma)
 
     # device
+    print('Device')
     if USE_CUDA:
         net = torch.nn.DataParallel(net)
         cudnn.benchmark = True

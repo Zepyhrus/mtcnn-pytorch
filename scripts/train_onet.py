@@ -39,16 +39,16 @@ momentum = 0.9
 gamma = 0.1
 weight_decay = 0.0005
 stepsize = [30000, 50000, 60000, 70000]
-max_iter = 80000
+max_iter = 100000
 
-save_interval = 10000
+save_interval = 50000
 
 prefix = "o"
 save_dir = "./models"
 
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20181218".format(prefix)
+save_prefix = save_dir + "/{}net_20190621".format(prefix)
 
 
 root_dir = r"../dataset/"

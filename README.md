@@ -79,7 +79,7 @@ c++ 模型文件在 `${REPO}/cpp`目录下
 
 6， 训练 onet 
 
-`~/anaconda3/bin/python train_rnet.py`
+`~/anaconda3/bin/python train_onet.py`
 
 #### 参与贡献
 1. Fork 本仓库

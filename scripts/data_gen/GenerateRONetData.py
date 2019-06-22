@@ -290,7 +290,7 @@ if __name__ == "__main__":
   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
   device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
   # pnet
-  pnet_weight_path = "./models/pnet_20181218_final.pkl"
+  pnet_weight_path = "./models/pnet_20190621_final.pkl"
   pnet = PNet(test=True)
   LoadWeights(pnet_weight_path, pnet)
   pnet.to(device)
@@ -298,7 +298,7 @@ if __name__ == "__main__":
   # rnet
   rnet = None
   if net_type == "ONET":
-    rnet_weight_path = "./models/rnet_20181218_final.pkl"
+    rnet_weight_path = "./models/rnet_20190621_final.pkl"
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
