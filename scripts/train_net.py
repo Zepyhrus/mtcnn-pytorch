@@ -157,7 +157,7 @@ def train(net):
     optimizer.step()
     scheduler.step()
 
-    if k% display == 0:
+    if k % display == 0:
       acc_cls = AddClsAccuracy(pred_cls, targets)
       acc_reg = AddBoxMap(pred_bbox, targets, INPUT_IMAGE_SIZE, INPUT_IMAGE_SIZE)
 
@@ -180,3 +180,7 @@ def train(net):
 
 if __name__ == '__main__':
   train(net)
+
+  if net_type == 'ONET':
+    print('='*35 + '  Finished!  ' + '='*35)
+    
