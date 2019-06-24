@@ -48,18 +48,11 @@ c++ 模型文件在 `${REPO}/cpp`目录下
 
 
 #### 训练
-
-首先cd到`${REPO}`：
-
-`mkdir dataset`
-
-然后cd到 scripts 目录下：
+cd到 scripts 目录下：
 1. 制作pnet 样本：
-
-`~/anaconda3/bin/python data_gen/GeneratePNetData.py `
+`python data_gen/GeneratePNetData.py `
 
 2. 训练pnet：
-
 `~/anaconda3/bin/python train_pnet.py`
 
 3. 制作 rnet 样本：

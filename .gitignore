@@ -6,3 +6,4 @@ models/
 *.log
 build/
 cmake-build-debug/
+scripts/output/

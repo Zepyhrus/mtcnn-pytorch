@@ -4,7 +4,12 @@ import cv2
 import torch
 import time
 import os
+from os.path import join, split
 import numpy as np
+
+
+from glob import glob
+
 from collections import OrderedDict
 from Nets import *
 from pylab import plt
@@ -20,9 +25,16 @@ def Image2Tensor(img, MEANS):
     return input
 
 class MTCNN(object):
-
-    def __init__(self, detectors=[None, None, None], min_face_size=40, scalor=0.79, threshold=[0.6, 0.7, 0.7],
-                 device=torch.device("cpu")):
+    def __init__(
+            self, 
+            detectors,
+            min_face_size,
+            scalor,
+            threshold,
+            device):
+        """
+        Initialize without default
+        """
         self.pnet = detectors[0]
         self.rnet = detectors[1]
         self.onet = detectors[2]
@@ -296,82 +308,52 @@ if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
     device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
     # pnet
-    pnet_weight_path = "./models/pnet_20181218_final.pkl"
+    # pnet_weight_path = "./models/pnet_20181218_final.pkl"
+    pnet_weight_path = "./models/pnet_20190621_final.pkl"
     pnet = PNet(test=True)
     LoadWeights(pnet_weight_path, pnet)
     pnet.to(device)
 
     # rnet
-    rnet_weight_path = "./models/rnet_20181218_final.pkl"
+    # rnet_weight_path = "./models/rnet_20181218_final.pkl"
+    rnet_weight_path = "./models/rnet_20190621_final.pkl"
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
 
     # onet
-    onet_weight_path = "./models/onet_20181218_2_final.pkl"
+    # onet_weight_path = "./models/onet_20181218_final.pkl"
+    onet_weight_path = "./models/onet_20190621_final.pkl"
     onet = ONet(test=True)
     LoadWeights(onet_weight_path, onet)
     onet.to(device)
 
-    mtcnn = MTCNN(detectors=[pnet, rnet, onet], device=device, threshold=[0.6, 0.7, 0.7])
+    mtcnn = MTCNN(
+        detectors=[pnet, rnet, onet],
+        device=device,
+        min_face_size=20,
+        threshold=[0.5, 0.5, 0.5],
+        scalor=0.909)
 
+    images = glob('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/*')
 
-    #
-    # img_path = "~/dataset/faces3.jpg"
-    # # img_path = "~/dataset/WIDER_FACE/WIDER_train/images/14--Traffic/14_Traffic_Traffic_14_545.jpg"
-    # # img_path = "~/dataset/WIDER_FACE/WIDER_val/images/14--Traffic/14_Traffic_Traffic_14_380.jpg"
-    # img_path = os.path.expanduser(img_path)
-    #
-    # img =cv2.imread(img_path)
-    # b = time.time()
-    # bboxes = mtcnn.detect(img)
-    # e = time.time()
-    # print("time cost: {} ms".format((e-b) * 1000.0))
-    #
-    # if SHOW_FIGURE:
-    #     if bboxes is not None:
-    #         plt.figure()
-    #         tmp = img.copy()
-    #         for i in bboxes:
-    #             x0 = int(i[0])
-    #             y0 = int(i[1])
-    #             x1 = x0 + int(i[2])
-    #             y1 = y0 + int(i[3])
-    #             cv2.rectangle(tmp, (x0, y0), (x1, y1), (0, 0, 255), 2)
-    #         plt.imshow(tmp[:, :, ::-1])
-    #         plt.title("result")
-    #     plt.show()
+    for i in images:
+        j = split(i)[-1]
+        if j == '119106252.jpg':
+            print("now process -> {}".format(j))
+            img = cv2.imread(i)
+            bboxes = mtcnn.detect(img)
 
-    fp = "~/dataset/GC_FACE_VAL"
-    fp = os.path.expanduser(fp)
-    txt = "file_list.txt"
-    lines = []
-    with open(os.path.join(fp, txt)) as f:
-        lines = f.readlines()
-
-    f = open("res.txt", "w")
-    for i in lines:
-        j = i.strip()
-        print("now process -> {}".format(j))
-        f.write("{}".format(j))
-        sample = os.path.join(fp, j)
-        img = cv2.imread(sample)
-        bboxes = mtcnn.detect(img)
-
-        if bboxes is not None:
-            f.write(" {} ".format(bboxes.shape[0]))
-            for b in bboxes:
-                x = int(b[0])
-                y = int(b[1])
-                w = int(b[2])
-                h = int(b[3])
-                f.write("{} {} {} {} ".format(x, y, w, h))
-                img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+            if bboxes is not None:
+                for b in bboxes:
+                    x = int(b[0])
+                    y = int(b[1])
+                    w = int(b[2])
+                    h = int(b[3])
+                    img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                
                 cv2.imwrite("output/{}".format(j), img)
-        else:
-            f.write(" 0")
-        f.write("\n")
-    f.close()
+  
     print("done")
 
 

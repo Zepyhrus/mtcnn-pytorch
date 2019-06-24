@@ -1,6 +1,10 @@
 # coding: utf-8
 import sys
 sys.path.append(sys.path[0] + "/../")
+
+from datetime import datetime
+
+
 from data.DataSouce import DataSource
 from data.augmentation import *
 import os
@@ -76,14 +80,16 @@ save_dir = "./models"
 
 if not os.path.exists(save_dir):
   os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20190621".format(prefix)
+
+surfix = datetime.now().strftime('%Y%m%d')
+save_prefix = save_dir + "/{}net_{}".format(prefix, surfix)
 
 
 root_dir = r"../dataset/"
 
 
 topk = 0.7
-MEANS = [127.5,127.5,127.5]
+MEANS = [127.5, 127.5, 127.5]
 train_anno_path = []
 val_anno_path = []
 
@@ -110,8 +116,8 @@ def train(net):
 
   # optimizer and scheduler
   # Modified by Sherk, Adam optimizer is applied for faster convergence
-  # optimizer = optim.SGD(net.parameters(), lr=base_lr, momentum=momentum, weight_decay=weight_decay)
-  optimizer = optim.Adam(net.parameters(), lr=base_lr, weight_decay=weight_decay)  # Adam takes no momentum
+  optimizer = optim.SGD(net.parameters(), lr=base_lr, momentum=momentum, weight_decay=weight_decay)
+  # optimizer = optim.Adam(net.parameters(), lr=base_lr, weight_decay=weight_decay)  # Adam takes no momentum
   scheduler = optim.lr_scheduler.MultiStepLR(optimizer, stepsize, gamma)
 
   # device
@@ -158,10 +164,11 @@ def train(net):
       log.info("train iter: {}, lr: {}, loss: {:.4f}, cls loss: {:.4f}, bbox loss: {:.4f}, cls acc: {:.4f}, bbox acc: {:.4f}".format(
         k, optimizer.param_groups[0]['lr'], loss.item(), loss_cls.item(), loss_reg.item(), acc_cls, acc_reg))
 
-    if k % save_interval == 0:
-      path = save_prefix + "_iter_{}.pkl".format(k)
-      SaveCheckPoint(path, net, optimizer, scheduler, epoch)
-      log.info("=> save model: {}".format(path))
+    # donot save the intermediate .pkls
+    # if k % save_interval == 0:
+    #   path = save_prefix + "_iter_{}.pkl".format(k)
+    #   SaveCheckPoint(path, net, optimizer, scheduler, epoch)
+    #   log.info("=> save model: {}".format(path))
 
     k += 1
 
