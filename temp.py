@@ -1,32 +1,68 @@
 """
   This is the playground for mtcnn-pytorch project
+  Author: Sherk
+  First drafted : 2019-6-11
 """
 import sys
 
 import os
 from os.path import join, split
-from glob import glob
 
 
-IMAGE_PATH = '/home/ubuntu/Workspace/dataset/WIDER_FACE'
-TRAIN_PATH = join(IMAGE_PATH, 'WIDER_train/images')
-VAL_PATH = join(IMAGE_PATH, 'WIDER_val/images')
+import numpy as np
+import numpy.random as npr
+import pandas as pd
 
-# merge WIDER FACE train and val data sets
-sub_folders = os.listdir(TRAIN_PATH)
+import torch
+import cv2
 
-cum = 0
-for folder in sub_folders:
-  cum += len(os.listdir(join(TRAIN_PATH, folder)))
+from scripts.MTCNN import MTCNN, LoadWeights
+from scripts.Nets import PNet, RNet, ONet
 
-print(cum)
 
-"""
-  Using:
-    cat wider_face_train_bbx_gt.txt | wc -l
-      : yielding 185184 lines of record
-    cat wider_face_val_bbx_gt.txt >> wider_face_train_bbx_gt.txt 
-    cat wider_face_train_bbx_gt.txt | wc -l
-      : yielding 231344 lines of record
-"""
+USE_CUDA = True
+GPU_ID = [0]
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
+device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
+
+
+prefix = '20190624'
+
+# pnet
+pnet_weight_path = "scripts/models/pnet_{}_final.pkl".format(prefix)
+pnet = PNet(test=True)
+LoadWeights(pnet_weight_path, pnet)
+pnet.to(device)
+
+# rnet
+rnet_weight_path = "scripts/models/rnet_{}_final.pkl".format(prefix)
+rnet = RNet(test=True)
+LoadWeights(rnet_weight_path, rnet)
+rnet.to(device)
+
+# onet
+onet_weight_path = "scripts/models/onet_{}_final.pkl".format(prefix)
+onet = ONet(test=True)
+LoadWeights(onet_weight_path, onet)
+onet.to(device)
+
+mtcnn = MTCNN(
+  detectors=[pnet, rnet, onet],
+  device=device,
+  min_face_size=20,
+  threshold=[0.6, 0.7, 0.7],
+  scalor=0.79)
+
+
+
+img  = cv2.imread('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/119106252.jpg')
+
+bboxes = mtcnn.detect(img)
+
+for b in bboxes:
+  x, y, w, h = [int(z) for z in b[0:4]]
+  img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                
+  cv2.imwrite("output/{}".format(j), img)
 

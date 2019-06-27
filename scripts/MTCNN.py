@@ -1,4 +1,7 @@
 # coding: utf-8
+import sys
+sys.path.extend(['scripts'])
+
 
 import cv2
 import torch
@@ -332,8 +335,8 @@ if __name__ == "__main__":
         detectors=[pnet, rnet, onet],
         device=device,
         min_face_size=20,
-        threshold=[0.5, 0.5, 0.5],
-        scalor=0.909)
+        threshold=[0.6, 0.7, 0.7],
+        scalor=0.79)
 
     images = glob('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/*')
 
