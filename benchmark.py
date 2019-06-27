@@ -1,7 +1,9 @@
 """
-  This is the playground for mtcnn-pytorch project
-  Author: Sherk
-  First drafted : 2019-6-11
+  This is the benchmark for mtcnn-pytorch project, taking 2 dataset:
+    1. the WIDER FACE validation datasets;
+    2. the self maintained production environment images;
+  Author: Sherk;
+  First drafted : 2019-6-27;
 """
 import sys
 
@@ -56,6 +58,7 @@ mtcnn = MTCNN(
   scalor=0.91)
 
 
+
 images = glob('/home/ubuntu/Workspace/dataset/benchmark/*')
 # image = 'img/faces2.jpg'
 for image in tqdm(images):
@@ -73,4 +76,6 @@ for image in tqdm(images):
       cv2.imwrite("output/{}".format(image_name), img)
   else:
     print(image_name)
+
+
 
