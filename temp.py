@@ -7,7 +7,8 @@ import sys
 
 import os
 from os.path import join, split
-
+from glob import glob
+from tqdm import tqdm
 
 import numpy as np
 import numpy.random as npr
@@ -50,19 +51,26 @@ onet.to(device)
 mtcnn = MTCNN(
   detectors=[pnet, rnet, onet],
   device=device,
-  min_face_size=20,
-  threshold=[0.6, 0.7, 0.7],
+  min_face_size=40,
+  threshold=[0.6, 0.7, 0.8],
   scalor=0.79)
 
 
+images = glob('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/*')
+# image = 'img/faces2.jpg'
+for image in tqdm(images):
+  img  = cv2.imread(image)
+  image_name = split(image)[-1]
 
-img  = cv2.imread('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/119106252.jpg')
+  # print(img.shape)
+  bboxes = mtcnn.detect(img)
 
-bboxes = mtcnn.detect(img)
-
-for b in bboxes:
-  x, y, w, h = [int(z) for z in b[0:4]]
-  img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
-                
-  cv2.imwrite("output/{}".format(j), img)
+  if bboxes is not None:
+    for b in bboxes:
+      x, y, w, h = [int(z) for z in b[0:4]]
+      img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                    
+      cv2.imwrite("output/{}".format(image_name), img)
+  else:
+    print(image_name)
 
