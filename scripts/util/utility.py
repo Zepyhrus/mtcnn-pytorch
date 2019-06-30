@@ -6,6 +6,11 @@ import sys
 import numpy as np
 import argparse
 
+from datetime import datetime
+
+
+DATE_FIX = '20190624'  # datetime.now().strftime('%Y%m%d')
+
 
 
 def parse_args(argv):

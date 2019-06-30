@@ -12,6 +12,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data as data
 from util.torchutil import SaveCheckPoint
 from util.Logger import Logger
+from util.utility import parse_args, DATE_FIX
 from Nets import *
 
 
@@ -46,7 +47,7 @@ prefix = "r"
 save_dir = "./models"
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20190621".format(prefix)
+save_prefix = save_dir + "/{}net_{}".format(prefix, DATE_FIX)
 
 
 root_dir = r"../dataset/"

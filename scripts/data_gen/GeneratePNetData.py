@@ -27,7 +27,7 @@ log = Logger("./log/{}_{}.log".format(__file__.split('/')[-1],
 
 # 小于该人脸的就不要了
 # 太小的话，会有太多的误检
-MIN_FACE_SIZE = 40
+MIN_FACE_SIZE = 20  #TODO: original is set to be 40
 IOU_POS_THRES = 0.65
 IOU_NEG_THRES = 0.3
 IOU_PART_THRES = 0.4
@@ -75,7 +75,7 @@ if not os.path.exists(output_part_dir):
 
 # output lmdb
 # 1 TB
-LMDB_MAP_SIZE = 1099511627776
+LMDB_MAP_SIZE = 1099511627776  # 1024 ** 4
 env_pos_image = lmdb.open(os.path.join(output_pos_dir, "image_pos"), map_size=LMDB_MAP_SIZE)
 env_pos_label = lmdb.open(os.path.join(output_pos_dir, "label_pos"), map_size=LMDB_MAP_SIZE)
 

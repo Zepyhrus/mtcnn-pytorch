@@ -12,7 +12,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data as data
 from util.torchutil import SaveCheckPoint
 from util.Logger import Logger
-from util.utility import parse_args
+from util.utility import parse_args, DATE_FIX
 from Nets import *
 
 
@@ -39,7 +39,7 @@ momentum = 0.9
 gamma = 0.1
 weight_decay = 0.0005
 stepsize = [30000, 50000, 60000, 70000]
-max_iter = 100000
+max_iter = 80000
 
 save_interval = 50000
 
@@ -48,14 +48,14 @@ save_dir = "./models"
 
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
-save_prefix = save_dir + "/{}net_20190621".format(prefix)
+save_prefix = save_dir + "/{}net_{}1".format(prefix, DATE_FIX)
 
 
 root_dir = r"../dataset/"
 INPUT_IMAGE_SIZE = 48
 
 topk = 0.7
-MEANS = [127.5,127.5,127.5]
+MEANS = [127.5, 127.5, 127.5]
 train_anno_path = []
 val_anno_path = []
 

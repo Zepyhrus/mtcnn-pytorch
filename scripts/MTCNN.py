@@ -304,32 +304,31 @@ if __name__ == "__main__":
   os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
   device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
+  
+  date_fix = '20181218'
   # pnet
-#   pnet_weight_path = "./models/pnet_20181218_final.pkl"
-  pnet_weight_path = "./models/pnet_20190621_final.pkl"
+  pnet_weight_path = "./models/pnet_{}_final.pkl".format(date_fix)
   pnet = PNet(test=True)
   LoadWeights(pnet_weight_path, pnet)
   pnet.to(device)
 
   # rnet
-#   rnet_weight_path = "./models/rnet_20181218_final.pkl"
-  rnet_weight_path = "./models/rnet_20190621_final.pkl"
+  rnet_weight_path = "./models/rnet_{}_final.pkl".format(date_fix)
   rnet = RNet(test=True)
   LoadWeights(rnet_weight_path, rnet)
   rnet.to(device)
 
   # onet
-#   onet_weight_path = "./models/onet_20181218_final.pkl"
-  onet_weight_path = "./models/onet_20190621_final.pkl"
+  onet_weight_path = "./models/onet_{}_final.pkl".format(date_fix)
   onet = ONet(test=True)
   LoadWeights(onet_weight_path, onet)
   onet.to(device)
 
   mtcnn = MTCNN(
     detectors=[pnet, rnet, onet],
-    min_face_size=20,
+    min_face_size=10,
     device=device,
-    scalor=0.709,
+    scalor=0.79,
     threshold=[0.6, 0.7, 0.7])
 
 
@@ -374,7 +373,7 @@ if __name__ == "__main__":
           y = int(b[1])
           w = int(b[2])
           h = int(b[3])
-          img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+          img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
           cv2.imwrite("output/{}".format(j), img)
   
   print("done")

@@ -18,7 +18,7 @@ import cv2
 import lmdb
 
 from util.Logger import Logger
-from util.utility import parse_args
+from util.utility import parse_args, DATE_FIX
 
 import time
 if not os.path.exists("./log"):
@@ -28,7 +28,7 @@ log = Logger("./log/{}_{}.log".format(__file__.split('/')[-1],
 from MTCNN import *
 
 # 小于该人脸的就不要了
-MIN_FACE_SIZE = 40
+MIN_FACE_SIZE = 20
 IOU_POS_THRES = 0.65
 IOU_NEG_THRES = 0.3
 IOU_PART_THRES = 0.4
@@ -290,7 +290,7 @@ if __name__ == "__main__":
   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
   device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
   # pnet
-  pnet_weight_path = "./models/pnet_20190621_final.pkl"
+  pnet_weight_path = "./models/pnet_{}_final.pkl".format(DATE_FIX)
   pnet = PNet(test=True)
   LoadWeights(pnet_weight_path, pnet)
   pnet.to(device)
@@ -298,11 +298,16 @@ if __name__ == "__main__":
   # rnet
   rnet = None
   if net_type == "ONET":
-    rnet_weight_path = "./models/rnet_20190621_final.pkl"
+    rnet_weight_path = "./models/rnet_{}_final.pkl".format(DATE_FIX)
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
 
-  mt = MTCNN(detectors=[pnet, rnet, None], min_face_size=24, threshold=[0.5, 0.5, 0.5], device=device)
+  mt = MTCNN(detectors=[pnet, rnet, None],
+    min_face_size=24,
+    threshold=[0.5, 0.5, 0.5],
+    device=device,
+    scalor=0.79)
+  
   GenerateData(mt)
   log.info("over...")
