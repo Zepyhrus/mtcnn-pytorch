@@ -45,7 +45,7 @@ else:
   post_fix = 'o'
 
 # path to wider face
-root_dir = r'~/dataset/WIDER_FACE'
+root_dir = r'~/Workspace/dataset/WIDER_FACE'
 root_dir = os.path.expanduser(root_dir)
 
 train_dir = os.path.join(root_dir, 'WIDER_train/images')
@@ -250,6 +250,7 @@ def GenerateData(mt):
         txn_neg_label = env_neg_label.begin(write=True)
         inner_neg_idx = 0
         log.info("now commit netative lmdb")
+
       if inner_part_idx > 1000:
         txn_part_image.commit()
         txn_part_label.commit()

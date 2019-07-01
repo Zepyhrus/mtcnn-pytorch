@@ -8,3 +8,6 @@ build/
 cmake-build-debug/
 scripts/output/
 scripts/models/
+output/
+img/
+anno/
