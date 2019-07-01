@@ -7,3 +7,4 @@ models/
 build/
 cmake-build-debug/
 scripts/output/
+scripts/models/
