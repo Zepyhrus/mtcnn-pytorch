@@ -19,6 +19,8 @@ def parse_args(argv):
   
   parser.add_argument('--net_type',
     type=str, help='net type for operation')
+  parser.add_argument('--test_type',
+    type=str, help='test type: accurate or speed test')
   
   return parser.parse_args(argv)
 
@@ -223,4 +225,4 @@ if __name__ == '__main__':
   print('Hello world!')
 
 
-  print(parse_args(sys.argv[1:]).net_type)
+  print(parse_args(sys.argv[1:]).test_type)
