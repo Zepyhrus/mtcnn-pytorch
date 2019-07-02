@@ -77,9 +77,9 @@ cd到 scripts 目录下：
 # Validation
 1. Trained model: `20190624`, min_face_size = 20, 29 seconds:
 Detect  Missing All     False
-2487    82      2343    226
-Precision: 0.9120
-Recall: 0.9681
+2487    78      2412    153
+Precision: 0.9404
+Recall: 0.9696
 
 2. Trained model: `20190624`, min_face_size = 30, 49 seconds:
 Detect  Missing All     False
