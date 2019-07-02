@@ -106,7 +106,7 @@ if test_type == 'accuracy':
 
     for box in boxes_lab:
       if max(iou(box, boxes_det)) < iou_threshold:
-        missing_detection += 1
+        missing_detection += 120
         # Blue stands for missings
         cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (255, 0, 0), 2)
       # Green is from label
