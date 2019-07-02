@@ -33,7 +33,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
 device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
 
 
-prefix = '20190624'
+prefix = '20181218'
 
 
 # pnet
@@ -57,12 +57,12 @@ onet.to(device)
 mtcnn = MTCNN(
   detectors=[pnet, rnet, onet],
   device=device,
-  min_face_size=20,
-  threshold=[0.6, 0.7, 0.7],
+  min_face_size=40,
+  threshold=[0.6, 0.8, 0.9],
   scalor=0.79)
 
-#%%
-filenames = os.listdir('img')
+#%% benchmark for production 373 images
+filenames = os.listdir('benchmark')
 
 missing_detection = 0
 false_detection = 0
@@ -72,7 +72,7 @@ all_labels = 0
 for filename in tqdm(filenames):
   iou_threshold = 0.4
 
-  image = 'img/{}'.format(filename)
+  image = 'benchmark/{}'.format(filename)
   img = cv2.imread(image)
 
   boxes_det = mtcnn.detect(img)
@@ -89,18 +89,16 @@ for filename in tqdm(filenames):
 
   # ===================================================================
   if boxes_lab is None:
-    if boxes_det is None:
-      continue
-    else:
+    if boxes_det is not None:
       false_detection += len(boxes_det)
-      continue
-  
+      all_detection += len(boxes_det)
+    continue
+
   if boxes_det is None:
-    if boxes_lab is None:
-      continue
-    else:
+    if boxes_lab is not None:
       missing_detection += len(boxes_lab)
-      continue
+      all_labels += len(boxes_lab)
+    continue
 
   for box in boxes_lab:
     if max(iou(box, boxes_det)) < iou_threshold:
@@ -122,18 +120,23 @@ for filename in tqdm(filenames):
   all_detection += len(boxes_det)
   all_labels += len(boxes_lab)
 
-print('Detect\tMissing\tAll\tFalse')
+print('Detect\tMissing\tFalse\tAll')
 print('{}\t{}\t{}\t{}'.format(all_detection,
-  missing_detection, all_labels, false_detection))
+  missing_detection, false_detection, all_labels))
 
-precision = round(1 - false_detection / (all_labels + false_detection), 4)
-print('Precision: {}'.format(precision))
+precision = 1 - false_detection / all_detection
+print('Precision: {}'.format(round(precision, 4)))
 
-recall = round(1 - missing_detection / (all_detection + missing_detection), 4)
-print('Recall: {}'.format(recall))
+recall = 1 - missing_detection / all_labels
+print('Recall: {}'.format(round(recall, 4)))
+
+f1_score = 2 * precision * recall / (precision + recall)
+print('F1 score: {}'.format(round(f1_score, 4)))
 
 
 
+#%% speed benchmark
+# taking images benchmark from folder benchmark
 
 
 

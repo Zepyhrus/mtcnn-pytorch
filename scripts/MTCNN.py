@@ -315,19 +315,19 @@ if __name__ == "__main__":
 
     prefix = '20190624'
     # pnet
-    pnet_weight_path = "./models/pnet_{}_final.pkl".format(prefix)
+    pnet_weight_path = "scripts/models/pnet_{}_final.pkl".format(prefix)
     pnet = PNet(test=True)
     LoadWeights(pnet_weight_path, pnet)
     pnet.to(device)
 
     # rnet
-    rnet_weight_path = "./models/rnet_{}_final.pkl".format(prefix)
+    rnet_weight_path = "scripts/models/rnet_{}_final.pkl".format(prefix)
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
 
     # onet
-    onet_weight_path = "./models/onet_{}_final.pkl".format(prefix)
+    onet_weight_path = "scripts/models/onet_{}_final.pkl".format(prefix)
     onet = ONet(test=True)
     LoadWeights(onet_weight_path, onet)
     onet.to(device)
@@ -335,28 +335,27 @@ if __name__ == "__main__":
     mtcnn = MTCNN(
         detectors=[pnet, rnet, onet],
         device=device,
-        min_face_size=20,
-        threshold=[0.6, 0.7, 0.7],
+        min_face_size=40,
+        threshold=[0.6, 0.8, 0.9],
         scalor=0.79)
 
-    images = glob('/home/ubuntu/Workspace/mtcnn-tensorflow/picture/*')
+    images = glob('benchmark/*')
 
     for i in images:
         j = split(i)[-1]
-        if j == '119106252.jpg':
-            print("now process -> {}".format(j))
-            img = cv2.imread(i)
-            bboxes = mtcnn.detect(img)
+        print("now process -> {}".format(j))
+        img = cv2.imread(i)
+        bboxes = mtcnn.detect(img)
 
-            if bboxes is not None:
-                for b in bboxes:
-                    x = int(b[0])
-                    y = int(b[1])
-                    w = int(b[2])
-                    h = int(b[3])
-                    img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
-                
-                cv2.imwrite("output/{}".format(j), img)
+        if bboxes is not None:
+            for b in bboxes:
+                x = int(b[0])
+                y = int(b[1])
+                w = int(b[2])
+                h = int(b[3])
+                img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+            
+            cv2.imwrite("output/{}".format(j), img)
   
     print("done")
 

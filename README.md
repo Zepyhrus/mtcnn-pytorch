@@ -75,24 +75,48 @@ cd到 scripts 目录下：
 `~/anaconda3/bin/python train_onet.py`
 
 # Validation
-1. Trained model: `20190624`, min_face_size = 20, 29 seconds:
-Detect  Missing All     False
-2487    78      2412    153
-Precision: 0.9404
-Recall: 0.9696
+1. model: `20190624`, min_face_size:20, threshold: [0.6, 0.7, 0.7], 71 seconds:
+Detect  Missing False   All
+2488    78      153     2412
+Precision: 0.9385
+Recall: 0.9677
+F1 score: 0.9529
 
-2. Trained model: `20190624`, min_face_size = 30, 49 seconds:
-Detect  Missing All     False
-2311    216     2340    184
-Precision: 0.9271
-Recall: 0.9145
+2. model: `20190624`, min_face_size: 20, threshold: [0.6, 0.8, 0.9], 55 seconds:
+Detect  Missing False   All
+2373    124     84      2412
+Precision: 0.9646
+Recall: 0.9486
+F1 score: 0.9565
 
-3. Trained model: `20190624`, min_face_size = 40, 28 seconds:
-Detect  Missing All     False
-2113    381     2338    150
-Precision: 0.9397
-Recall: 0.8472
+2. model: `20181218`, mfs: 20, threshold： [0.6, 0.8, 0.9], 58s:
+Detect  Missing False   All
+2406    129     123     2412
+Precision: 0.9489
+Recall: 0.9465
+F1 score: 0.9477
 
+
+3. model: `20190624`, min_face_size: 40, threshold: [0.6, 0.8, 0.9], 25 seconds:
+Detect  Missing False   All
+2052    420     60      2412
+Precision: 0.9708
+Recall: 0.8259
+F1 score: 0.8925
+
+3. model: `20181218`, mfs: 40, threshold： [0.6, 0.8, 0.9], 58s:
+Detect  Missing False   All
+2057    435     80      2412
+Precision: 0.9611
+Recall: 0.8197
+F1 score: 0.8848
+
+4. model: `20190624`, min_face_size: 40, threshold: [0.6, 0.95, 0.9], 25 seconds:
+Detect  Missing False   All
+1968    475     31      2412
+Precision: 0.9842
+Recall: 0.8031
+F1 score: 0.8845
 
 
 
