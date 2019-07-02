@@ -5,6 +5,7 @@
 import sys
 import numpy as np
 import argparse
+import os
 
 from datetime import datetime
 
@@ -175,6 +176,47 @@ def py_nms(dets, thresh, mode="Union"):
   return keep
 
 
+
+def iou(box, boxes):
+  '''裁剪的box和图片所有人脸box的iou值
+  参数：
+  box：裁剪的box,当box维度为4时表示box左上右下坐标，维度为5时，最后一维为box的置信度
+  boxes：图片所有人脸box,[n,4]
+  返回值：
+  iou值，[n,]
+  '''
+  #box面积
+  box_area = (box[2]-box[0]+1)*(box[3]-box[1]+1)
+  #boxes面积,[n,]
+  area = (boxes[:, 2]-boxes[:, 0]+1)*(boxes[:, 3]-boxes[:, 1]+1)
+  #重叠部分左上右下坐标
+  xx1 = np.maximum(box[0], boxes[:, 0])
+  yy1 = np.maximum(box[1], boxes[:, 1])
+  xx2 = np.minimum(box[2], boxes[:, 2])
+  yy2 = np.minimum(box[3], boxes[:, 3])
+
+  #重叠部分长宽
+  w = np.maximum(0, xx2-xx1+1)
+  h = np.maximum(0, yy2-yy1+1)
+  #重叠部分面积
+  inter = w*h
+  return inter/(box_area+area-inter+1e-10)
+
+
+def boxes_extract(xml_file):
+  """
+    extract boxes from given xml file
+    @xml_file: input xml file name
+  """
+  import xml.etree.ElementTree as et
+  if not os.path.isfile(xml_file):
+    return None
+  else:
+    root = et.parse(xml_file).getroot()
+    box_extract = lambda x: [int(t.text) for t in x[-1]]
+    boxes = [box_extract(x) for x in root[6:]]
+
+    return np.asarray(boxes)
 
 
 if __name__ == '__main__':

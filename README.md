@@ -4,7 +4,7 @@
 
 ![](./img/res2.jpg)
 
-#### 介绍
+# 介绍
 
 mtcnn用pytorch实现代码（从入门到工程化）
 
@@ -19,7 +19,7 @@ mtcnn分为三个网络，网络模型都很小。原版论文里面的多任务
 
 
 
-#### 安装
+# 安装
 
 1. wider face数据集，下载后放置到： `~/dataset/WIDER_FACE`目录下，该目录下的目录为：
 ```
@@ -31,7 +31,7 @@ WIDER_val
 3. pytorchv1.0.0, lmdb, opencv, numpy, pylab
 4. (c++) cmake, opencv 
 
-#### 测试
+# 测试
 python模型文件在 `${REPO}/scripts/models`目录下
 
 c++ 模型文件在 `${REPO}/cpp`目录下
@@ -47,7 +47,7 @@ c++ 模型文件在 `${REPO}/cpp`目录下
 
 
 
-#### 训练
+# 训练
 cd到 scripts 目录下：
 1. 制作pnet 样本：
 `python data_gen/GeneratePNetData.py `
@@ -74,9 +74,27 @@ cd到 scripts 目录下：
 
 `~/anaconda3/bin/python train_onet.py`
 
-#### 参与贡献
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+# Validation
+1. Trained model: `20190624`, min_face_size = 20, 29 seconds:
+Detect  Missing All     False
+2487    82      2343    226
+Precision: 0.9120
+Recall: 0.9681
+
+2. Trained model: `20190624`, min_face_size = 30, 49 seconds:
+Detect  Missing All     False
+2311    216     2340    184
+Precision: 0.9271
+Recall: 0.9145
+
+3. Trained model: `20190624`, min_face_size = 40, 28 seconds:
+Detect  Missing All     False
+2113    381     2338    150
+Precision: 0.9397
+Recall: 0.8472
+
+
+
+
+
 

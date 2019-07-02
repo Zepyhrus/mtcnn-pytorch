@@ -1,3 +1,4 @@
+#%%
 """
   This is the benchmark for mtcnn-pytorch project, taking 2 dataset:
     1. the WIDER FACE validation datasets;
@@ -11,6 +12,7 @@ import os
 from os.path import join, split
 from glob import glob
 from tqdm import tqdm
+import re
 
 import numpy as np
 import numpy.random as npr
@@ -21,6 +23,7 @@ import cv2
 
 from scripts.MTCNN import MTCNN, LoadWeights
 from scripts.Nets import PNet, RNet, ONet
+from scripts.util.utility import iou, boxes_extract
 
 
 USE_CUDA = True
@@ -31,6 +34,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "c
 
 
 prefix = '20190624'
+
 
 # pnet
 pnet_weight_path = "scripts/models/pnet_{}_final.pkl".format(prefix)
@@ -55,27 +59,85 @@ mtcnn = MTCNN(
   device=device,
   min_face_size=20,
   threshold=[0.6, 0.7, 0.7],
-  scalor=0.91)
+  scalor=0.79)
+
+#%%
+filenames = os.listdir('img')
+
+missing_detection = 0
+false_detection = 0
+all_detection = 0
+all_labels = 0
+
+for filename in tqdm(filenames):
+  iou_threshold = 0.4
+
+  image = 'img/{}'.format(filename)
+  img = cv2.imread(image)
+
+  boxes_det = mtcnn.detect(img)
+  # boxes_det = boxes_det[boxes_det[:, 2] >= 8]
+  # boxes_det = boxes_det[boxes_det[:, 3] >= 8]
+  if boxes_det is not None:
+    boxes_det[:, 2] += boxes_det[:, 0]
+    boxes_det[:, 3] += boxes_det[:, 1]
+
+  xml_file = 'anno/{}.xml'.format( '.'.join( filename.split('.')[:-1] ) )
+  boxes_lab = boxes_extract(xml_file)
+  # boxes_lab = boxes_lab[boxes_lab[:, 3] - boxes_lab[:, 1] >= 8]
+  # boxes_lab = boxes_lab[boxes_lab[:, 2] - boxes_lab[:, 0] >= 8]
+
+  # ===================================================================
+  if boxes_lab is None:
+    if boxes_det is None:
+      continue
+    else:
+      false_detection += len(boxes_det)
+      continue
+  
+  if boxes_det is None:
+    if boxes_lab is None:
+      continue
+    else:
+      missing_detection += len(boxes_lab)
+      continue
+
+  for box in boxes_lab:
+    if max(iou(box, boxes_det)) < iou_threshold:
+      missing_detection += 1
+      # Blue stands for missings
+      cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (255, 0, 0), 2)
+    # Green is from label
+    # cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
+  
+  for box in boxes_det:
+    if max(iou(box, boxes_lab)) < iou_threshold:
+      false_detection += 1
+      # red stands for false detection
+      cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
+    # Red is from detector
+    # cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
+
+  cv2.imwrite('output/{}'.format(filename), img)
+  all_detection += len(boxes_det)
+  all_labels += len(boxes_lab)
+
+print('Detect\tMissing\tAll\tFalse')
+print('{}\t{}\t{}\t{}'.format(all_detection,
+  missing_detection, all_labels, false_detection))
+
+precision = round(1 - false_detection / (all_labels + false_detection), 4)
+print('Precision: {}'.format(precision))
+
+recall = round(1 - missing_detection / (all_detection + missing_detection), 4)
+print('Recall: {}'.format(recall))
 
 
 
-images = glob('/home/ubuntu/Workspace/dataset/benchmark/*')
-# image = 'img/faces2.jpg'
-for image in tqdm(images):
-  img  = cv2.imread(image)
-  image_name = split(image)[-1]
 
-  # print(img.shape)
-  bboxes = mtcnn.detect(img)
 
-  if bboxes is not None:
-    for b in bboxes:
-      x, y, w, h = [int(z) for z in b[0:4]]
-      img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    
-      cv2.imwrite("output/{}".format(image_name), img)
-  else:
-    print(image_name)
+
+
 
 
 

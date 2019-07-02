@@ -298,23 +298,36 @@ class MTCNN(object):
                 return None
             return bbox[keep]
 
+def LoadWeights(path, net):
+    checkpoint = torch.load(path)
+    weights = OrderedDict()
+    for k, v in checkpoint["weights"].items():
+        name = k[7:]
+        weights[name] = v
+    net.load_state_dict(weights)
+
+if __name__ == "__main__":
+    USE_CUDA = True
+    GPU_ID = [0]
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
+    device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
+
+    prefix = '20190624'
     # pnet
-    # pnet_weight_path = "./models/pnet_20181218_final.pkl"
-    pnet_weight_path = "./models/pnet_20190621_final.pkl"
+    pnet_weight_path = "./models/pnet_{}_final.pkl".format(prefix)
     pnet = PNet(test=True)
     LoadWeights(pnet_weight_path, pnet)
     pnet.to(device)
 
     # rnet
-    # rnet_weight_path = "./models/rnet_20181218_final.pkl"
-    rnet_weight_path = "./models/rnet_20190621_final.pkl"
+    rnet_weight_path = "./models/rnet_{}_final.pkl".format(prefix)
     rnet = RNet(test=True)
     LoadWeights(rnet_weight_path, rnet)
     rnet.to(device)
 
     # onet
-    # onet_weight_path = "./models/onet_20181218_final.pkl"
-    onet_weight_path = "./models/onet_20190621_final.pkl"
+    onet_weight_path = "./models/onet_{}_final.pkl".format(prefix)
     onet = ONet(test=True)
     LoadWeights(onet_weight_path, onet)
     onet.to(device)
