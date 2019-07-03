@@ -41,9 +41,9 @@ int MTCNN::InitDetector(PTModelParam pparam)
     mpONET = torch::jit::load(pparam->model_path[2]);
 
     //2. to device
-    mpPNET->to(torch::Device(pparam->device_type, pparam->gpu_id));
-    mpRNET->to(torch::Device(pparam->device_type, pparam->gpu_id));
-    mpONET->to(torch::Device(pparam->device_type, pparam->gpu_id));
+    mpPNET.to(torch::Device(pparam->device_type, pparam->gpu_id));
+    mpRNET.to(torch::Device(pparam->device_type, pparam->gpu_id));
+    mpONET.to(torch::Device(pparam->device_type, pparam->gpu_id));
 
     return 0;
 }
@@ -51,9 +51,9 @@ int MTCNN::InitDetector(PTModelParam pparam)
 
 int MTCNN::UnInitDetector()
 {
-    mpPNET.reset();
-    mpRNET.reset();
-    mpONET.reset();
+    // mpPNET.reset();
+    // mpRNET.reset();
+    // mpONET.reset();
     return 0;
 }
 
@@ -121,7 +121,7 @@ int MTCNN::PNET(cv::Mat & src, std::vector<cv::Rect>& outFaces)
     std::vector<torch::jit::IValue> outputs;
     for(int i = 0; i < inputs.size(); i++)
     {
-        outputs.emplace_back(mpPNET->forward(inputs[i]));
+        outputs.emplace_back(mpPNET.forward(inputs[i]));
     }
     //3.3 post
 
@@ -252,7 +252,7 @@ int MTCNN::RunPNetLayer(cv::Mat& src, int scale_idx, std::vector<float>& outBoxe
     float scalor = mvScales[scale_idx];
     std::vector<torch::jit::IValue> inputs;
     PrePNET(src, scalor, inputs);
-    auto&& to = mpPNET->forward(inputs);
+    auto&& to = mpPNET.forward(inputs);
     PostPNET(to, scalor, outBoxes, outScores);
 
     return 0;
@@ -503,7 +503,7 @@ int MTCNN::ReProjectBBox(std::vector<float>& origin, std::vector<float>& bbox)
     return 0;
 }
 
-int MTCNN::RunRONet(std::shared_ptr<torch::jit::script::Module> net,
+int MTCNN::RunRONet(torch::jit::script::Module net,
                     cv::Mat & src,
                     std::vector<cv::Rect>& outFaces,
                     int IMAGE_SIZE)
@@ -574,19 +574,19 @@ int MTCNN::RunRONet(std::shared_ptr<torch::jit::script::Module> net,
 
     std::vector<torch::jit::IValue> inputs = {input};
 
-    auto&& out = net->forward(inputs);
+    auto&& out = net.forward(inputs);
     auto ot = out.toTuple();
     inputs = ot->elements();
     auto cls = inputs[0].toTensor().cpu();
     auto reg = inputs[1].toTensor().cpu();
 
-    std::vector<float> bboxes;	//用于标识回归框
-    std::vector<float> score;	//分数
-    std::vector<int> keep_index;	//位置
+    std::vector<float> bboxes;	// 用于标识回归框
+    std::vector<float> score;	// 分数
+    std::vector<int> keep_index;	// 位置
     std::vector<float> resBBoxes;	// 原框及最终框（复用）
 
-    auto cls_viewer = cls.accessor<float, 2>();//N * 2
-    auto reg_viewer = reg.accessor<float, 2>();//N * 4
+    auto cls_viewer = cls.accessor<float, 2>();  // N * 2
+    auto reg_viewer = reg.accessor<float, 2>();  // N * 4
 
     for(int i = 0; i < N; i++)
     {

@@ -76,7 +76,7 @@ protected:
     int ReProjectBBox(std::vector<float>& origin, std::vector<float>& bbox);
 
     //rnet onet的共用
-    int RunRONet(std::shared_ptr<torch::jit::script::Module> net, cv::Mat& src, std::vector<cv::Rect>& outFaces,
+    int RunRONet(torch::jit::script::Module net, cv::Mat& src, std::vector<cv::Rect>& outFaces,
                  int IMAGE_SIZE);
 
 
@@ -85,11 +85,11 @@ private:
     TModelParam mtParam;
     //pnet
     std::shared_ptr<BThreadPool> mWorker;
-    std::shared_ptr<torch::jit::script::Module> mpPNET;
+    torch::jit::script::Module mpPNET;
     //rnet
-    std::shared_ptr<torch::jit::script::Module> mpRNET;
+    torch::jit::script::Module mpRNET;
     //onet
-    std::shared_ptr<torch::jit::script::Module> mpONET;
+    torch::jit::script::Module mpONET;
 
     //netoutput
     static const std::vector<std::string> pnet_output;

@@ -16,7 +16,7 @@ cmake_minimum_required(VERSION 3.2)
 add_definitions(-std=c++11)
 
 # find Torch
-list(APPEND CMAKE_PREFIX_PATH "/opt/libtorch")
+list(APPEND CMAKE_PREFIX_PATH "/home/sherk/Workspace/pytorch/torch")
 find_package(Torch REQUIRED)
 message(STATUS "TORCH FOUND!")
 message(STATUS "Torch inc: " ${TORCH_INCLUDE_DIRS})
