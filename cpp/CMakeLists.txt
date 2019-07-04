@@ -18,6 +18,9 @@ add_definitions(-std=c++11)
 # find Torch
 list(APPEND CMAKE_PREFIX_PATH "/home/sherk/Workspace/pytorch/torch")
 find_package(Torch REQUIRED)
+find_package(Boost 1.65 REQUIRED COMPONENTS system)  # package to boost
+
+
 message(STATUS "TORCH FOUND!")
 message(STATUS "Torch inc: " ${TORCH_INCLUDE_DIRS})
 message(STATUS "Torch lib: " ${TORCH_LIBRARIES})
@@ -56,6 +59,9 @@ set(SRC main.cpp MTCNN.cpp torchutils.cpp)
 #set(SRC example-app.cpp)
 
 add_executable(mtcnn_test ${SRC})
-target_link_libraries(mtcnn_test "${TORCH_LIBRARIES}")
+target_link_libraries(mtcnn_test ${TORCH_LIBRARIES})
 target_link_libraries(mtcnn_test ${OPENCV_LIBS})
+target_link_libraries(mtcnn_test ${Boost_LIBRARIES})  # link to boost library
+
+
 set_property(TARGET mtcnn_test PROPERTY CXX_STANDARD 11)

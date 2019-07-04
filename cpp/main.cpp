@@ -8,6 +8,8 @@
 #include <opencv2/opencv.hpp>
 #include <BTimer.hpp>
 #include "MTCNN.h"
+#include <boost/filesystem.hpp>
+
 
 int main(int argc, char* argv[])
 {
@@ -21,9 +23,9 @@ int main(int argc, char* argv[])
     TAlgParam alg_param;
     alg_param.min_face = 40;
     alg_param.scale_factor = 0.79;
-    alg_param.cls_thre[0] = 0.6;
-    alg_param.cls_thre[1] = 0.7;
-    alg_param.cls_thre[2] = 0.7;
+    alg_param.cls_thre[0] = 0.7;
+    alg_param.cls_thre[1] = 0.8;
+    alg_param.cls_thre[2] = 0.9;
 
     TModelParam modelParam;
     modelParam.alg_param = alg_param;
@@ -32,6 +34,12 @@ int main(int argc, char* argv[])
     modelParam.scale_factor = {1.0f, 1.0f, 1.0f};
     modelParam.gpu_id = 0;
     modelParam.device_type = torch::DeviceType::CUDA;
+
+    cv::VideoCapture capture(0);
+    if (!capture.isOpened())
+    {
+        return;
+    }
 
 
 
@@ -61,7 +69,7 @@ int main(int argc, char* argv[])
 
     cv::imshow("result", src);
     cv::waitKey(0);
-//	cv::imwrite("res2.jpg", src);
+	// cv::imwrite("res2.jpg", src);
     LEAVE_FUNC;
     return 0;
 }
