@@ -43,5 +43,4 @@ FaceDetectDriver LoadMTCNNModel();
 void ReleaseMTCNNDriver(FaceDetectDriver driver);
 bool DetectFace(FaceDetectDriver driver,
 								const cv::Mat& image,
-								std::vector<FaceBox>& faces,
-								int min_face = 30);
+								std::vector<FaceBox>& faces);

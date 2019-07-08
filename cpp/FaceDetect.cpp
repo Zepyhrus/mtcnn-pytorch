@@ -55,8 +55,6 @@ FaceDetectDriver LoadMTCNNModel()
 }
 
 
-
-
 void ReleaseMTCNNDriver(FaceDetectDriver driver)
 {
 	MTCNN* t = (MTCNN*)driver;
@@ -66,7 +64,7 @@ void ReleaseMTCNNDriver(FaceDetectDriver driver)
 bool DetectFace(
 	FaceDetectDriver driver,
 	const cv::Mat& image,
-	std::vector<FaceBox>& faces, int min_face)
+	std::vector<FaceBox>& faces)
 {
 	faces.clear();
 	MTCNN* cnn = (MTCNN*)driver;
@@ -75,7 +73,7 @@ bool DetectFace(
 	if (cnn)
 	{
 		// cnn->findFace(image, min_face);
-		cnn->DetectFace(image, outFaces)
+		cnn->detect_face(image, outFaces)
 
 		for (size_t i = 0; i < outFaces.size(); ++i)
 		{

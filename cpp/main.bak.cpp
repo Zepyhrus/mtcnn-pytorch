@@ -55,12 +55,12 @@ int main(int argc, char* argv[])
     LOGI("warm up...");
     timer.reset();
     for(int i = 0; i < 5; i++)
-        mt.DetectFace(src, outFaces);
+        mt.detect_face(src, outFaces);
     LOGI("warm up over, time cost: {}", timer.elapsed());
 
     timer.reset();
 	//for(;;)
-    mt.DetectFace(src, outFaces);
+    mt.detect_face(src, outFaces);
     LOGI(" cost: {}", timer.elapsed());
 
     // for(auto& i : outFaces)
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
             break;
         }
         ()[0]
-        mt.DetectFace(frame, outFaces);
+        mt.detect_face(frame, outFaces);
 
         for(auto& i : outFaces)
         {

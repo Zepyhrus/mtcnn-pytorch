@@ -43,7 +43,7 @@ public:
     int InitDetector(PTModelParam pparam);
 
     /* 检测人脸 */
-    int DetectFace(cv::Mat& src, std::vector<cv::Rect>& outFaces);
+    int detect_face(cv::Mat& src, std::vector<cv::Rect>& outFaces);
 
     /* 反初始化检测器*/
     int UnInitDetector();

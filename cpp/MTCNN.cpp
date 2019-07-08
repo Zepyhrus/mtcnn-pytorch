@@ -58,7 +58,7 @@ int MTCNN::UnInitDetector()
 }
 
 
-int MTCNN::DetectFace(cv::Mat & src, std::vector<cv::Rect>& outFaces)
+int MTCNN::detect_face(cv::Mat & src, std::vector<cv::Rect>& outFaces)
 {
     BTimer t;
     //int64_t tp, tr, to;
