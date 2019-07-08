@@ -68,11 +68,11 @@ int MTCNN::DetectFace(cv::Mat & src, std::vector<cv::Rect>& outFaces)
     ret = PNET(src, outFaces);
     // LOGI("Pnet time cost: {}", t.elapsed());
 
-//    auto tp = src.clone();
-//    for(auto& i : outFaces)
-//        cv::rectangle(tp, i, {0,255,0}, 2);
-//    cv::imshow("pnet", tp);
-//    cv::waitKey(0);
+    // auto tp = src.clone();
+    // for(auto& i : outFaces)
+    //     cv::rectangle(tp, i, {0,255,0}, 2);
+    // cv::imshow("pnet", tp);
+    // cv::waitKey(0);
 
     if (ret < 0)
         return ret;
