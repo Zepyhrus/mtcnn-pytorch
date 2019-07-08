@@ -55,7 +55,7 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/eigen)
 
 
-set(SRC main.cpp MTCNN.cpp torchutils.cpp)
+set(SRC main.cpp FaceDetect.cpp MTCNN.cpp torchutils.cpp)
 #set(SRC example-app.cpp)
 
 add_executable(mtcnn_test ${SRC})

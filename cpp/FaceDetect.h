@@ -42,5 +42,5 @@ struct FaceBox
 FaceDetectDriver LoadMTCNNModel();
 void ReleaseMTCNNDriver(FaceDetectDriver driver);
 bool DetectFace(FaceDetectDriver driver,
-								const cv::Mat& image,
+								cv::Mat& image,
 								std::vector<FaceBox>& faces);

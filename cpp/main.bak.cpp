@@ -10,7 +10,6 @@
 #include "MTCNN.h"
 #include <boost/filesystem.hpp>
 #include <unistd.h>
-#include "FaceDetect.h"
 
 
 int main(int argc, char* argv[])
@@ -76,7 +75,7 @@ int main(int argc, char* argv[])
     if (!cap.open(0))
     {
         LOGI("Failed to open camera...");
-        return -1;()[0]
+        return -1;
     }
 
     LOGI("Start using camera..");
@@ -89,7 +88,7 @@ int main(int argc, char* argv[])
         {
             break;
         }
-        ()[0]
+        
         mt.detect_face(frame, outFaces);
 
         for(auto& i : outFaces)

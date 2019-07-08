@@ -11,6 +11,7 @@
 #include <string>
 #include "MTCNN.h"
 #include "FaceDetect.h"
+#include "torchutils.h"
 
 // Using Caffe mtcnn model 
 // FaceDetectDriver LoadMTCNNModel(const std::string& pnet_file,
@@ -48,9 +49,8 @@ FaceDetectDriver LoadMTCNNModel()
 	modelParam.gpu_id = 0;
 	modelParam.device_type = torch::DeviceType::CUDA;
 
-	MTCNN mt;
-	mt.InitDetector(&modelParam);
-	MTCNN* context = mt;
+	MTCNN* context = new MTCNN;
+	context->InitDetector(&modelParam);
 	return context;
 }
 
@@ -63,7 +63,7 @@ void ReleaseMTCNNDriver(FaceDetectDriver driver)
 
 bool DetectFace(
 	FaceDetectDriver driver,
-	const cv::Mat& image,
+	cv::Mat& image,
 	std::vector<FaceBox>& faces)
 {
 	faces.clear();
@@ -73,18 +73,18 @@ bool DetectFace(
 	if (cnn)
 	{
 		// cnn->findFace(image, min_face);
-		cnn->detect_face(image, outFaces)
+		cnn->detect_face(image, outFaces);
 
 		for (size_t i = 0; i < outFaces.size(); ++i)
 		{
 			auto it = outFaces.begin() + i;
-			if (it->exist)
+			if (1)
 			{
 				FaceBox face;
 				face.box.x = it->x;  // it->x;
 				face.box.y = it->y;  // it->y;
-				face.box.width = it->width  // it->y2 - it->y1 + 1;
-				face.box.height = it->height  // it->x2 - it->x1 + 1;
+				face.box.width = it->width;  // it->y2 - it->y1 + 1;
+				face.box.height = it->height;  // it->x2 - it->x1 + 1;
 				for (int k = 0; k < LANDMARKNUMBER; ++k)
 				{
 					face.landmarks[k].x = 0;  // (*it).ppoint[k];
