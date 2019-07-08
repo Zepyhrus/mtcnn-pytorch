@@ -66,7 +66,7 @@ int MTCNN::DetectFace(cv::Mat & src, std::vector<cv::Rect>& outFaces)
     int ret = 0;
     t.reset();
     ret = PNET(src, outFaces);
-    LOGI("Pnet time cost: {}", t.elapsed());
+    // LOGI("Pnet time cost: {}", t.elapsed());
 
 //    auto tp = src.clone();
 //    for(auto& i : outFaces)
@@ -78,13 +78,13 @@ int MTCNN::DetectFace(cv::Mat & src, std::vector<cv::Rect>& outFaces)
         return ret;
     t.reset();
     ret = RNET(src, outFaces);
-    LOGI("Rnet time cost: {}", t.elapsed());
+    // LOGI("Rnet time cost: {}", t.elapsed());
 
     if (ret < 0)
         return ret;
     t.reset();
     ret = ONET(src, outFaces);
-    LOGI("Onet time cost: {}", t.elapsed());
+    // LOGI("Onet time cost: {}", t.elapsed());
 
     return ret;
 }

@@ -9,6 +9,7 @@
 #include <BTimer.hpp>
 #include "MTCNN.h"
 #include <boost/filesystem.hpp>
+#include <unistd.h>
 
 
 int main(int argc, char* argv[])
@@ -38,7 +39,7 @@ int main(int argc, char* argv[])
     cv::VideoCapture capture(0);
     if (!capture.isOpened())
     {
-        return;
+        return -1;
     }
 
 
@@ -67,9 +68,39 @@ int main(int argc, char* argv[])
     for(auto& i : outFaces)
         cv::rectangle(src, i, {0,255,0}, 2);
 
-    cv::imshow("result", src);
-    cv::waitKey(0);
+    // cv::imshow("result", src);
+    // cv::waitKey(0);
 	// cv::imwrite("res2.jpg", src);
+
+    cv::VideoCapture cap;
+    if (!cap.open(0))
+    {
+        LOGI("Failde to open camera.");
+        return -1;
+    }
+
+    cv::Mat frame;
+    while(1)
+    {
+        cap >> frame;
+        if (frame.empty()) 
+        {
+            usleep(10);
+            continue;
+        }
+        
+        mt.DetectFace(frame, outFaces);
+
+        for(auto& i : outFaces)
+        {
+            cv::rectangle(frame, i, {0, 255, 0}, 2);
+        }
+
+        cv::imshow("_", frame);
+        cv::waitKey(1);
+    }
+    
     LEAVE_FUNC;
+
     return 0;
 }
