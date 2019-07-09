@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
     cv::Mat frame;
     while(1)
     {
+        timer.reset();
         cap >> frame;
         if (frame.empty()) 
         {
@@ -90,6 +91,7 @@ int main(int argc, char* argv[])
         }
         
         mt.detect_face(frame, outFaces);
+        LOGI("Detect time cost: {}", timer.elapsed());
 
         for(auto& i : outFaces)
         {

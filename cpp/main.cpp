@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
         if (frame.empty()) break;
 
         DetectFace(m_faceDetector, frame, faces);
+        LOGI("Detect time cost: {}", timer.elapsed());
 
         for (auto& i : faces)
         {
@@ -63,8 +64,7 @@ int main(int argc, char* argv[])
 
         cv::imshow("_", frame);
         cv::waitKey(1);
-
-        LOGI("Detect time cost: {}", timer.elapsed());
+        
     }
 
     LEAVE_FUNC;

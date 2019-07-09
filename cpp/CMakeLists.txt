@@ -21,7 +21,7 @@ find_package(Torch REQUIRED)
 find_package(Boost 1.65 REQUIRED COMPONENTS system)  # package to boost
 
 
-message(STATUS "TORCH FOUND!")
+# message(STATUS "TORCH FOUND!")
 message(STATUS "Torch inc: " ${TORCH_INCLUDE_DIRS})
 message(STATUS "Torch lib: " ${TORCH_LIBRARIES})
 
@@ -53,6 +53,7 @@ add_definitions(-DUSE_PNET_MULTI_THREAD)
 
 include_directories(${CMAKE_SOURCE_DIR}/third_party)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/eigen)
+include_directories(${TORCH_INCLUDE_DIRS})
 
 
 set(SRC main.cpp FaceDetect.cpp MTCNN.cpp torchutils.cpp)

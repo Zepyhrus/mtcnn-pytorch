@@ -21,16 +21,17 @@
 // 	mtcnn* context = new mtcnn(pnet_file, rnet_file, onet_file);
 // 	return context;
 // }
+std::string model_path = "/home/sherk/Workspace/mtcnn-pytorch/cpp/models/";
 
 // Using Torch mtcnn model
 FaceDetectDriver LoadMTCNNModel()
 {
-	std::string pnet_weight_path = std::string(MODEL_PATH) + "pnet.pt";
-	std::string rnet_weight_path = std::string(MODEL_PATH) + "rnet.pt";
-	std::string onet_weight_path = std::string(MODEL_PATH) + "onet.pt";
+	std::string pnet_weight_path = model_path + "pnet.pt";
+	std::string rnet_weight_path = model_path + "rnet.pt";
+	std::string onet_weight_path = model_path + "onet.pt";
 
 	TAlgParam alg_param;
-	alg_param.min_face = 40;
+	alg_param.min_face = 80;
 	alg_param.scale_factor = 0.79;
 	alg_param.cls_thre[0] = 0.7;
 	alg_param.cls_thre[1] = 0.8;
