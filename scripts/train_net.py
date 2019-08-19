@@ -35,14 +35,14 @@ pre_checkpoint = None
 resume = False
 
 train_batch = 400
-display = 100
+display = 1000
 
 base_lr = 0.001
 clip_grad = 120.0
 momentum = 0.9
-gamma = 0.1
+gamma = 0.25
 weight_decay = 0.0005
-save_interval = 25000
+save_interval = 50000
 
 #TODO: modify the prefix to train different net
 net_type = parse_args(sys.argv[1:]).net_type
@@ -165,10 +165,10 @@ def train(net):
         k, optimizer.param_groups[0]['lr'], loss.item(), loss_cls.item(), loss_reg.item(), acc_cls, acc_reg))
 
     # donot save the intermediate .pkls
-    # if k % save_interval == 0:
-    #   path = save_prefix + "_iter_{}.pkl".format(k)
-    #   SaveCheckPoint(path, net, optimizer, scheduler, epoch)
-    #   log.info("=> save model: {}".format(path))
+    if k % save_interval == 0:
+      path = save_prefix + "_iter_{}.pkl".format(k)
+      SaveCheckPoint(path, net, optimizer, scheduler, epoch)
+      log.info("=> save model: {}".format(path))
 
     k += 1
 

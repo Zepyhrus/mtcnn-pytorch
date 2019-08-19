@@ -15,8 +15,9 @@ class PNet(nn.Module):
         super(PNet, self).__init__()
         self.features = nn.Sequential(
             # 3*12*12 -> 10*5*5
-            nn.Conv2d(3, 10, kernel_size=3, stride=2, padding=0),
+            nn.Conv2d(3, 10, kernel_size=3, stride=1, padding=0),
             nn.PReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
             # 10*5*5 -> 16*3*3
             nn.Conv2d(10, 16, kernel_size=3, stride=1, padding=0),

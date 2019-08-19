@@ -53,16 +53,17 @@ cd到 scripts 目录下：
 `python data_gen/GeneratePNetData.py `
 
 2. 训练pnet：
-`~/anaconda3/bin/python train_pnet.py`
+`~/anaconda3/bin/python train_pnet.py` or
+`python train_net.py --net_type PNET`
 
 3. 制作 rnet 样本：
 编辑GenerateRONetData.py中的net_type及 Pnet的网络权重路径，将rnet和onet置为None。
 
 `~/anaconda3/bin/python data_gen/GenerateRONetData.py `
 
-4. 训练 rnet 
-
-`~/anaconda3/bin/python train_rnet.py`
+4. 训练 rnet
+`~/anaconda3/bin/python train_rnet.py` or
+`python train_net.py --net_type RNET`
 
 5, 制作 onet 样本：
 
@@ -119,6 +120,17 @@ Recall: 0.8031
 F1 score: 0.8845
 
 
+5. model: `20190819`, min_face_size: 40, threshold:[0.7, 0.8, 0.9]
+Detect  Missing False   All
+2056    185     220     2022
+Precision: 0.893
+Recall: 0.9085
+F1 score: 0.9007
 
-
+5. model: `20190819`, min_face_size: 20, threshold:[0.6, 0.8, 0.9]
+Detect  Missing False   All
+2431    87      495     2022
+Precision: 0.7964
+Recall: 0.957
+F1 score: 0.8693
 

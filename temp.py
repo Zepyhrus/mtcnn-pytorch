@@ -28,7 +28,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
 device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
 
 
-prefix = '20190624'
+prefix = '20190819'
 
 # pnet
 pnet_weight_path = "scripts/models/pnet_{}_final.pkl".format(prefix)

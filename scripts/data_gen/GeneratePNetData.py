@@ -1,3 +1,4 @@
+#%%
 # coding: utf-8
 """
 读取wider face 数据集
@@ -20,14 +21,16 @@ from util.utility import *
 from util.Logger import Logger
 import time
 import lmdb
+
+#%%
 if not os.path.exists("./log"):
   os.mkdir("./log")
 log = Logger("./log/{}_{}.log".format(__file__.split('/')[-1],
                     time.strftime("%Y%m%d-%H%M%S"), time.localtime), level='debug').logger
-
+#%%
 # 小于该人脸的就不要了
 # 太小的话，会有太多的误检
-MIN_FACE_SIZE = 20  #TODO: original is set to be 40
+MIN_FACE_SIZE = 40  #TODO: original is set to be 40
 IOU_POS_THRES = 0.65
 IOU_NEG_THRES = 0.3
 IOU_PART_THRES = 0.4
@@ -148,7 +151,7 @@ with open(anno_file, "r") as f:
         score_1 = IOU(crop_box, i)
         score += [score_1]
       # score_iom = []
-      # for i in gt_bbox:
+      # for i in gt_bbox:k
       #     score_iom += [IOM(crop_box, i)]
       score = np.asarray(score)
       #score_iom = np.asarray(score_iom)

@@ -36,7 +36,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
 device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
 
 
-prefix = '20190624'
+prefix = '20190819'
 
 
 # pnet
@@ -60,8 +60,8 @@ onet.to(device)
 mtcnn = MTCNN(
   detectors=[pnet, rnet, onet],
   device=device,
-  min_face_size=40,
-  threshold=[0.7, 0.8, 0.9],
+  min_face_size=20,
+  threshold=[0.6, 0.8, 0.9],
   scalor=0.79)
 
 #%% benchmark for production 373 images
@@ -106,7 +106,7 @@ if test_type == 'accuracy':
 
     for box in boxes_lab:
       if max(iou(box, boxes_det)) < iou_threshold:
-        missing_detection += 120
+        missing_detection += 1
         # Blue stands for missings
         cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (255, 0, 0), 2)
       # Green is from label
