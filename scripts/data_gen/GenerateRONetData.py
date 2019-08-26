@@ -70,6 +70,7 @@ if not os.path.exists(output_part_dir):
 
 def GenerateData(mt):
   anno_file = os.path.join(anno_dir, "wider_face_train_bbx_gt.txt")
+  # anno_file = os.path.join(anno_dir, "test.txt")
   not_reg_file = open('no_reg.txt', 'w')
 
   # output lmdb
@@ -178,10 +179,15 @@ def GenerateData(mt):
           size = r[2]
           crop = np.zeros((size, size, 3), dtype=np.uint8)
           sx0, sy0, sx1, sy1, dx0, dy0, dx1, dy1 = pad_bbox(r, W, H)
-          if sx0 < 0 or sy0 < 0 or dx0 < 0 or dy0 < 0 or sx1 > W or sy1 > H or dx1 > size or dy1 > size:
+
+          if sx0 < 0 or sy0 < 0 or dx0 < 0 or dy0 < 0 or \
+             dy0 >= dy1 or dx0 >= dx1 or sy0 >= sy1 or sx0 >= sx1 or \
+             sx1 > W or sy1 > H or dx1 > size or dy1 > size:
             log.warning("img shape is: {},{}".format(img.shape[0], img.shape[1]))
+            not_reg_file.write('Box out of image: ' + filename + '\n')
             continue
           crop[dy0:dy1, dx0:dx1, :] = img[sy0:sy1, sx0:sx1, :]
+
           out = cv2.resize(crop, (OUT_IMAGE_SIZE, OUT_IMAGE_SIZE))
           # 保存
           label = np.array([0, 0, 1, 1, 0], dtype=np.float32)

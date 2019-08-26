@@ -14,9 +14,12 @@ import torch
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
 import torch.utils.data as data
+from torchvision import transforms
+
+
 from util.torchutil import SaveCheckPoint
 from util.Logger import Logger
-from util.utility import parse_args
+from util.utility import parse_args, DATE_FIX
 from Nets import *
 
 
@@ -81,7 +84,7 @@ save_dir = "./models"
 if not os.path.exists(save_dir):
   os.mkdir(save_dir)
 
-surfix = datetime.now().strftime('%Y%m%d')
+surfix = DATE_FIX # datetime.now().strftime('%Y%m%d')
 save_prefix = save_dir + "/{}net_{}".format(prefix, surfix)
 
 
@@ -108,7 +111,12 @@ def train(net):
   start_epoch = 0
   # dataset
   train_dataset = DataSource(train_anno_path, transform=Compose([
-    RandomMirror(0.5), SubtractFloatMeans(MEANS), ToPercentCoords(), PermuteCHW()
+    # TODO: Add random color jitter
+    RandomColorJit(),
+    RandomMirror(0.5),
+    SubtractFloatMeans(MEANS),
+    ToPercentCoords(),
+    PermuteCHW()
   ]), ratio=train_ratio, image_shape=(INPUT_IMAGE_SIZE, INPUT_IMAGE_SIZE, 3))
 
   # net

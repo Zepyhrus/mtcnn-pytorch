@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 
-DATE_FIX = datetime.now().strftime('%Y%m%d')
+DATE_FIX = '20190822' # datetime.now().strftime('%Y%m%d')
 
 
 

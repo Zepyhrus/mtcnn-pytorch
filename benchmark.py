@@ -36,31 +36,55 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in GPU_ID])
 device = torch.device("cuda:0" if torch.cuda.is_available() and USE_CUDA else "cpu")
 
 
-prefix = '20190819'
+prefix = '20190822'
 
 
 # pnet
 pnet_weight_path = "scripts/models/pnet_{}_final.pkl".format(prefix)
 pnet = PNet(test=True)
 LoadWeights(pnet_weight_path, pnet)
+
+# save the model to pt
+pnet.eval()
+dummy_tensor = torch.rand(1, 3, 12, 12)
+script_model = torch.jit.trace(pnet, dummy_tensor)
+
+torch.jit.save(script_model, 'pnet.new.pt')
+
 pnet.to(device)
+
 
 # rnet
 rnet_weight_path = "scripts/models/rnet_{}_final.pkl".format(prefix)
 rnet = RNet(test=True)
 LoadWeights(rnet_weight_path, rnet)
+
+rnet.eval()
+dummy_tensor = torch.rand(1, 3, 24, 24)
+script_model = torch.jit.trace(rnet, dummy_tensor)
+
+torch.jit.save(script_model, 'rnet.new.pt')
+
 rnet.to(device)
 
 # onet
 onet_weight_path = "scripts/models/onet_{}_final.pkl".format(prefix)
 onet = ONet(test=True)
 LoadWeights(onet_weight_path, onet)
+
+onet.eval()
+dummy_tensor = torch.rand(1, 3, 48, 48)
+script_model = torch.jit.trace(onet, dummy_tensor)
+
+torch.jit.save(script_model, 'onet.new.pt')
+
 onet.to(device)
 
+# initialize the mtcnn model
 mtcnn = MTCNN(
   detectors=[pnet, rnet, onet],
   device=device,
-  min_face_size=20,
+  min_face_size=40,
   threshold=[0.6, 0.8, 0.9],
   scalor=0.79)
 

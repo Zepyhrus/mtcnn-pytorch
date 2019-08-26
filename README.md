@@ -127,10 +127,22 @@ Precision: 0.893
 Recall: 0.9085
 F1 score: 0.9007
 
-5. model: `20190819`, min_face_size: 20, threshold:[0.6, 0.8, 0.9]
+6. model: `20190822` (.new2.pt), min_face_size: 40, threshold:[0.7, 0.8, 0.9]
 Detect  Missing False   All
-2431    87      495     2022
-Precision: 0.7964
-Recall: 0.957
-F1 score: 0.8693
+2077    164     219     2022
+Precision: 0.8946
+Recall: 0.9189
+F1 score: 0.9066
+
+
+
+7. model: `20190822` (.new3.pt), min_face_size: 40, threshold:[0.7, 0.8, 0.9]
+Detect	Missing	False	All
+2046	178	202	2022
+Precision: 0.9013
+Recall: 0.912
+F1 score: 0.9066
+
+
+
 

@@ -223,7 +223,9 @@ class MTCNN(object):
             size = i[2]
             sx0, sy0, sx1, sy1, dx0, dy0, dx1, dy1 = pad_bbox(i, W, H)
             crop = np.zeros((size, size, 3), dtype=np.uint8)
-            if sx0 < 0 or sy0 < 0 or dx0 < 0 or dy0 < 0 or sx1 > W or sy1 > H or dx1 > size or dy1 > size:
+            if sx0 < 0 or sy0 < 0 or dx0 < 0 or dy0 < 0 or \
+               sx0 >= sx1 or sy0 >= sy1 or dx0 >= dx1 or dy0 >= dy1 or\
+               sx1 > W or sy1 > H or dx1 > size or dy1 > size:
                 continue
             crop[dy0:dy1, dx0:dx1, :] = img[sy0:sy1, sx0:sx1, :]
             out = cv2.resize(crop, (IMAGE_SIZE, IMAGE_SIZE))
