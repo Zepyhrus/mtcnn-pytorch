@@ -85,7 +85,7 @@ mtcnn = MTCNN(
   detectors=[pnet, rnet, onet],
   device=device,
   min_face_size=40,
-  threshold=[0.6, 0.8, 0.9],
+  threshold=[0.7, 0.8, 0.9],
   scalor=0.79)
 
 #%% benchmark for production 373 images

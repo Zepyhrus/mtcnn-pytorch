@@ -11,3 +11,7 @@ scripts/models/
 output/
 img/
 anno/
+
+
+
+*.pt
